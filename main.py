@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect
+import backend
 
 app = Flask(__name__)
 
@@ -8,10 +9,11 @@ def show_login():
 
 @app.route('/action/login', methods=['POST'])
 def action_login():
-    # try logging in with username and password from request
-    # if success, redirect to /loggedin
-    # if error, redirect back to /
-    return redirect('/loggedin')
+    if backend.verify_user(request.form['username'], request.form['password']):
+        return redirect('/loggedin')
+    else:
+        # TODO error: invalid username/password
+        return redirect('/')
 
 @app.route('/loggedin')
 def show_loggedin():
@@ -23,10 +25,13 @@ def show_register():
 
 @app.route('/action/register', methods=['POST'])
 def action_register():
-    # try registering with username and password from request
-    # if success, redirect to /
-    # if error, redirect back to /register
-    return redirect('/')
+    if backend.retrieve_user(request.form['username']) is None:
+        backend.insert_user(request.form['username'], request.form['password'])
+        return redirect('/')
+    else:
+        # TODO error: username already exists
+        return redirect('/register')
 
 if __name__ == '__main__':
+    backend.create_user_table()
     app.run()
