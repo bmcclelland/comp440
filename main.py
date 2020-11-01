@@ -45,7 +45,7 @@ def action_register():
 
 @app.route('/action/initialize', methods=['POST'])
 def action_initialize():
-    #backend.initialize();
+    backend.initialize();
     return redirect('/')
 
 if __name__ == '__main__':
