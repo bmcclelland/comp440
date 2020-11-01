@@ -43,6 +43,11 @@ def action_register():
     else:
         return redirect('/register?error=name_in_use')
 
+@app.route('/action/initialize', methods=['POST'])
+def action_initialize():
+    #backend.initialize();
+    return redirect('/')
+
 if __name__ == '__main__':
     backend.create_user_table()
     app.run()
