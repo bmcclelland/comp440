@@ -22,9 +22,13 @@
 					<i class="fas fa-lock"></i>
 				</label>
 				<input type="password" name="password" placeholder="Password" id="password" required>
-				<div class="msg">{{ msg }}</div>
 				<input type="submit" value="Login">
 			</form>
+			<br />
+			<form action="{{ url_for('action_initialize') }}" method="post">
+				<input type="Submit" value="Initialize database">
+			</form>
+			<div class="msg">{{ msg }}</div>
 		</div>
 	</body>
 </html>
