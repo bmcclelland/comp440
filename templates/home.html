@@ -5,5 +5,5 @@
 {% block content %}
 <h2>Home Page</h2>
 <p>Welcome back, {{ username }}!</p>
-<form action = > <input type="submit" value="Initialize"> </form>
+<button action="{{ url_for('/action/initialize') }}" method="post" type="submit">Initialize</button>
 {% endblock %}
