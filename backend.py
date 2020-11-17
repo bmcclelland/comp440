@@ -25,7 +25,7 @@ def retrieve_user(usernameStr):
 
 def initialize():
     db = _connect()
-    with open('sql/initialize.sql', 'r') as f:
+    with open('sql/schema.sql', 'r') as f:
         with db.cursor() as cursor:
             for result in cursor.execute(f.read(), multi=True):
                 pass
