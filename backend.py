@@ -23,14 +23,18 @@ def retrieve_user(usernameStr):
     db.close()
     return result
 
-def initialize():
+def _load_sql(file):
     db = _connect()
-    with open('sql/schema.sql', 'r') as f:
+    with open(file, 'r') as f:
         with db.cursor() as cursor:
             for result in cursor.execute(f.read(), multi=True):
                 pass
             db.commit()
             db.close()
+
+def initialize():
+    _load_sql('sql/schema.sql')
+    _load_sql('sql/data.sql')
 
 def _connect():
     return mysql.connector.connect(
