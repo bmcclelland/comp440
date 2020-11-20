@@ -34,10 +34,10 @@ CREATE TABLE Blogs (
     blogid      INT NOT NULL AUTO_INCREMENT,
     subject     VARCHAR(50) NOT NULL,
     description VARCHAR(250),
-    postuser    VARCHAR(20) NOT NULL,
-    pdate       DATE NOT NULL,
+    author      VARCHAR(20) NOT NULL,
+    blogdate    DATE NOT NULL,
     PRIMARY KEY (blogid),
-    FOREIGN KEY (postuser) REFERENCES Users (username)
+    FOREIGN KEY (author) REFERENCES Users (username)
 );
 
 CREATE TABLE Tags (
@@ -51,7 +51,7 @@ CREATE TABLE Comments (
     commentid   INT NOT NULL AUTO_INCREMENT,
     sentiment   VARCHAR(20) NOT NULL,
     description VARCHAR(250) NOT NULL,
-    cdate       DATE NOT NULL,
+    commentdate DATE NOT NULL,
     blogid      INT NOT NULL,
     author      VARCHAR (20) NOT NULL,
     PRIMARY KEY (commentid),
