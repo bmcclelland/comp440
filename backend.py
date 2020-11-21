@@ -34,6 +34,7 @@ def _load_sql(file):
 
 def initialize():
     _load_sql('sql/schema.sql')
+    _load_sql('sql/triggers.sql')
     _load_sql('sql/data.sql')
 
 def _connect():
