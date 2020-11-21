@@ -1,3 +1,6 @@
+/* Old users table */
+DROP TABLE IF EXISTS users;
+
 DROP TABLE IF EXISTS Comments;
 DROP TABLE IF EXISTS Tags;
 DROP TABLE IF EXISTS Hobbies;
