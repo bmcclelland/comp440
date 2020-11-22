@@ -25,6 +25,9 @@
 				<label for="lastname"><i class="fas fa-chevron-right"></i></label>
                 <input type="text" name="lastname" placeholder="Last Name (optional)" id="lastname" autocomplete="off">
 				<input type="submit" value="Register">
+                {% if msg %}
+                    <div class="msg">{{ msg }}</div>
+                {% endif %}
 			</form>
 		</div>
 	</body>

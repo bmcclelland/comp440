@@ -104,6 +104,7 @@ def action_register():
 @app.route('/action/initialize', methods=['POST'])
 def action_initialize():
     backend.initialize();
+    set_username(None)
     return redirect('/?result=initialized')
 
 @app.route('/action/logout', methods=['GET'])
