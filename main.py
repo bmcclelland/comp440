@@ -119,5 +119,4 @@ def action_comment():
     return redirect('/blog/' + str(request.form['blogid']))
 
 if __name__ == '__main__':
-    backend.create_user_table()
     app.run()
