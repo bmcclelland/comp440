@@ -1,10 +1,5 @@
 import mysql.connector
 
-def create_user_table():
-    db = _connect()
-    _create_user_table(db)
-    db.close()
-
 def insert_user(usernameStr, passwordStr):
     db = _connect()
     result = _insert_user(db, usernameStr, passwordStr)
@@ -63,12 +58,6 @@ def _connect():
         host='127.0.0.1',
         database='440project'
     )
-
-def _create_user_table(db):
-    cursor = db.cursor()
-    query = "CREATE TABLE IF NOT EXISTS Users (username VARCHAR(32) PRIMARY KEY, password VARCHAR(32))"
-    cursor.execute(query)
-    cursor.close()
 
 def _insert_user(db, usernameStr, passwordStr):
     cursor = db.cursor()
