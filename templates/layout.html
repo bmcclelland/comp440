@@ -13,7 +13,7 @@
                 {% if username %}
                     <a href="{{ url_for('show_home') }}"><i class="fas fa-home"></i>Home</a>
                     <a href="{{ url_for('show_home') }}"><i class="fas fa-user-circle"></i>Profile</a>
-                    <a href="{{ url_for('action_logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                    <a href="{{ url_for('action_logout') }}"><i class="fas fa-sign-out-alt"></i>Logout {{ username }}</a>
                 {% else %}
                     <a href="{{ url_for('show_login') }}"><i class="fas"></i>Login</a>
                     <a href="{{ url_for('show_register') }}"><i class="fas"></i>Register</a>
