@@ -53,31 +53,11 @@ def show_bloglist():
 
 @app.route('/blog/<int:id>')
 def show_blog(id):
-    blog = {
-        'id':1,
-        'author':'alice',
-        'subject':'Helllo',
-        'description':'post',
-        'date':'2020-01-01',
-        'tags':['one','t w o'],
-        'comments':[
-            {
-                'id':1,
-                'sentiment':'positive',
-                'description':'Nice',
-                'author':'bob',
-                'date':'2020-01-02'
-            },
-            {
-                'id':2,
-                'sentiment':'positive',
-                'description':'Nice',
-                'author':'eve',
-                'date':'2020-01-03'
-            }
-        ]
-    }
-    return std_template('blog.html',blog=blog)
+    blog = backend.get_blog(id)
+    if blog is None:
+        return "Blog not found", 404
+    else:
+        return std_template('blog.html',blog=blog)
 
 @app.route('/post')
 def show_postblog():

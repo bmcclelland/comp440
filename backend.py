@@ -128,6 +128,38 @@ def create_comment(blogid, author, sentiment, description):
         cursor.close()
         db.close()
 
+def get_blog(blogid):
+    # Returns the given blog along with its tags and comments.
+    # If no such blog, return None.
+    db = _connect()
+    cursor = db.cursor(dictionary=True)
+    try:
+        # Get blog
+        query = "SELECT blogid as id, author, description, blogdate as date FROM Blogs WHERE blogid = %s"
+        data = (blogid,)
+        cursor.execute(query, data)
+        blog = cursor.fetchone()
+
+        if blog is None:
+            return None
+
+        # Get tags
+        query = "SELECT tag FROM Tags WHERE blogid = %s"
+        data = (blogid,)
+        cursor.execute(query, data)
+        tags = map(lambda tag: tag['tag'], cursor.fetchall())
+        blog['tags'] = tags
+
+        # Get comments
+        query = "SELECT commentid as id, author, sentiment, description, commentdate as date FROM Comments WHERE blogid=%s"
+        data = (blogid,)
+        cursor.execute(query, data)
+        blog['comments'] = cursor.fetchall()
+        return blog
+    finally:
+        cursor.close()
+        db.close()
+
 def _load_sql(file):
     db = _connect()
     with open(file, 'r') as f:
