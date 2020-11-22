@@ -13,6 +13,8 @@ class ErrorCommentOwnBlog:
     pass
 
 def insert_user(username, password, email, firstname, lastname):
+    firstname = _fixup_name(firstname)
+    lastname  = _fixup_name(lastname)
     db = _connect()
     cursor = db.cursor()
     try:
@@ -124,6 +126,14 @@ def create_comment(blogid, author, sentiment, description):
     finally:
         cursor.close()
         db.close()
+
+# Strips bordering whitespace, returns None if name is all whitespace or empty
+def _fixup_name(name):
+    name = name.strip()
+    if not name:
+        return None
+    else:
+        return name
 
 # Join firstname/lastname together, respecting Nones
 def _join_names(item):

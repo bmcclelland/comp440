@@ -95,7 +95,7 @@ def action_register():
     if backend.verify_free_username(username):
         if backend.verify_free_email(email):
             backend.insert_user(username, password, email, firstname, lastname)
-            return redirect('/')
+            return redirect('/login')
         else:
             return redirect('/register?result=email_in_use')
     else:

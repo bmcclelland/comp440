@@ -15,17 +15,16 @@
 			</div>
 			<form action="{{ url_for('action_register') }}" method="post" autocomplete="off">
 				<label for="username"><i class="fas fa-user"></i></label>
-				<input type="text" name="username" placeholder="Username" id="username" required>
+				<input type="text" name="username" placeholder="Username" id="username" autocomplete="off" required>
 				<label for="password"><i class="fas fa-lock"></i></label>
 				<input type="password" name="password" placeholder="Password" id="password" required>
 				<label for="email"><i class="fas fa-envelope"></i></label>
-				<input type="email" name="email" placeholder="Email" id="email" required>
+				<input type="email" name="email" placeholder="Email" id="email" autocomplete="off" required>
 				<label for="firstname"><i class="fas fa-chevron-right"></i></label>
-				<input type="text" name="firstname" placeholder="First Name (optional)" id="firstname">
+				<input type="text" name="firstname" placeholder="First Name (optional)" id="firstname" autocomplete="off">
 				<label for="lastname"><i class="fas fa-chevron-right"></i></label>
-                <input type="text" name="lastname" placeholder="Last Name (optional)" id="lastname">
+                <input type="text" name="lastname" placeholder="Last Name (optional)" id="lastname" autocomplete="off">
 				<input type="submit" value="Register">
-				<div class="msg">{{ msg }}</div>
 			</form>
 		</div>
 	</body>
