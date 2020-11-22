@@ -63,19 +63,16 @@ def verify_free_email(email):
 
 def get_bloglist():
     db = _connect()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
     try:
-        query = "SELECT blogid,author,subject,blogdate FROM Blogs ORDER BY blogdate DESC,blogid DESC"
+        query = """
+            SELECT B.blogid as id, B.author, B.subject, B.blogdate as date, U.firstname, U.lastname
+            FROM Blogs as B, Users as U
+            WHERE B.author = U.username
+            ORDER BY B.blogdate DESC, B.blogid DESC
+        """
         cursor.execute(query)
-        result = []
-        for (blogid,author,subject,date) in cursor.fetchall():
-            result.append({
-                'id': blogid,
-                'author': author,
-                'subject': subject,
-                'date': date
-            })
-        return result
+        return map(_join_names, cursor.fetchall())
     finally:
         cursor.close()
         db.close()
@@ -128,6 +125,22 @@ def create_comment(blogid, author, sentiment, description):
         cursor.close()
         db.close()
 
+# Join firstname/lastname together, respecting Nones
+def _join_names(item):
+    firstname = item.pop('firstname')
+    lastname  = item.pop('lastname')
+    fullname = None
+
+    if firstname is None:
+        fullname = lastname
+    elif lastname is None:
+        fullname = firstname
+    else:
+        fullname = firstname + ' ' + lastname
+
+    item['fullname'] = fullname
+    return item
+
 def get_blog(blogid):
     # Returns the given blog along with its tags and comments.
     # If no such blog, return None.
@@ -135,13 +148,19 @@ def get_blog(blogid):
     cursor = db.cursor(dictionary=True)
     try:
         # Get blog
-        query = "SELECT blogid as id, author, subject, description, blogdate as date FROM Blogs WHERE blogid = %s"
+        query = """
+            SELECT B.blogid as id, B.author, B.subject, B.description, B.blogdate as date, U.firstname, U.lastname
+            FROM Blogs as B, Users as U
+            WHERE B.author = U.username AND blogid = %s
+        """
         data = (blogid,)
         cursor.execute(query, data)
         blog = cursor.fetchone()
 
         if blog is None:
             return None
+
+        blog = _join_names(blog)
 
         # Get tags
         query = "SELECT tag FROM Tags WHERE blogid = %s"
@@ -151,10 +170,15 @@ def get_blog(blogid):
         blog['tags'] = tags
 
         # Get comments
-        query = "SELECT commentid as id, author, sentiment, description, commentdate as date FROM Comments WHERE blogid = %s ORDER BY commentdate DESC, commentid DESC"
+        query = """
+            SELECT C.commentid as id, C.author, C.sentiment, C.description, C.commentdate as date, U.firstname, U.lastname
+            FROM Comments as C, Users as U
+            WHERE C.author = U.username AND C.blogid = %s
+            ORDER BY C.commentdate DESC, C.commentid DESC
+        """
         data = (blogid,)
         cursor.execute(query, data)
-        blog['comments'] = cursor.fetchall()
+        blog['comments'] = map(_join_names, cursor.fetchall())
         return blog
     finally:
         cursor.close()

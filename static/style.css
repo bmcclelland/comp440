@@ -105,6 +105,9 @@ body {
   	padding: 5px;
 	background-color: #fff;
 }
+.bloglist td {
+    padding-right: 20px;
+}
 .msg {
     background-color: #754400;
     color: #edecea;

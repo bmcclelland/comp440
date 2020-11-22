@@ -7,11 +7,17 @@
     <input type="Submit" value="Initialize database">
 </form>
 <h2>Blogs</h2>
-<table>
+<table class="bloglist">
 {% for blog in blogs %}
 <tr>
     <td>{{ blog['date'] }}</td>
-    <td>{{ blog['author'] }}</td>
+    <td>
+        {% if blog['fullname'] %}
+            {{ blog['fullname'] }} ({{ blog['author'] }})
+        {% else %}
+            {{ blog['author'] }}
+        {% endif %}
+    </td>
     <td><a href="{{ url_for('show_blog', id=blog['id']) }}">{{ blog['subject'] }}</a></td>
 </tr>
 {% endfor %}

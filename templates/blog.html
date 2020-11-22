@@ -4,7 +4,16 @@
 
 {% block content %}
 <h2>{{ blog['subject'] }}</h2>
-<h4>Posted by {{ blog['author'] }} on {{ blog['date'] }}</h4>
+
+<h4>
+    Posted by
+    {% if blog['fullname'] %}
+        {{ blog['fullname'] }} ({{ blog['author'] }})
+    {% else %}
+        {{ blog['author'] }}
+    {% endif %}
+    on {{ blog['date'] }}
+</h4>
 
 {% for tag in blog['tags'] %}
 <span class="tag">{{ tag }}</span>
@@ -27,7 +36,14 @@
     </form>
     {% for comment in blog['comments'] %}
         <div>
-            <h4>{{ comment['author'] }} on {{ comment['date'] }} ({{ comment['sentiment'] }})</h4>
+            <h4>
+                {% if comment['fullname'] %}
+                    {{ comment['fullname'] }} ({{ comment['author'] }})
+                {% else %}
+                    {{ comment['author'] }}
+                {% endif %}
+                on {{ comment['date'] }} ({{ comment['sentiment'] }})
+            </h4>
             <p>{{ comment['description'] }}</p>
         </div>
     {% endfor %}
