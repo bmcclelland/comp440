@@ -98,6 +98,19 @@ body {
   	margin-bottom: 20px;
   	padding: 0 15px;
 }
+.tag {
+  	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    height: 30px;
+  	margin: 0 0 5px 0;
+  	padding: 5px;
+	background-color: #fff;
+}
+.msg {
+    height: 30px;
+    width: 100%;
+    border: 0;
+    text-align: center;
+}
 .navtop {
   	background-color: #2f3947;
   	height: 60px;

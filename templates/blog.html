@@ -5,6 +5,11 @@
 {% block content %}
 <h2>{{ blog['subject'] }}</h2>
 <h4>Posted by {{ blog['author'] }} on {{ blog['date'] }}</h4>
+
+{% for tag in blog['tags'] %}
+<span class="tag">{{ tag }}</span>
+{% endfor %}
+
 <p>{{ blog['description'] }}</p>
 
 <h3>Comments</h3>

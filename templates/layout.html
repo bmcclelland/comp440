@@ -12,7 +12,8 @@
 				<h1>Website Title</h1>
                 {% if username %}
                     <a href="{{ url_for('show_home') }}"><i class="fas fa-home"></i>Home</a>
-                    <a href="{{ url_for('show_home') }}"><i class="fas fa-user-circle"></i>Profile</a>
+                    <!--<a href="{{ url_for('show_home') }}"><i class="fas fa-user-circle"></i>Profile</a>-->
+                    <a href="{{ url_for('show_postblog') }}"><i class="fas fa-pen"></i>Post Blog</a>
                     <a href="{{ url_for('action_logout') }}"><i class="fas fa-sign-out-alt"></i>Logout {{ username }}</a>
                 {% else %}
                     <a href="{{ url_for('show_login') }}"><i class="fas"></i>Login</a>
@@ -20,6 +21,9 @@
                 {% endif %}
 			</div>
 		</nav>
+        {% if msg %}
+            <div class="msg">{{ msg }}</div>
+        {% endif %}
 		<div class="content">
 			{% block content %}{% endblock %}
 		</div>

@@ -17,6 +17,14 @@ def get_result_msg():
         return 'Registration failed: email already in use'
     elif result == 'initialized':
         return 'Database reinitialized'
+    elif result == 'blogs_per_day':
+        return 'Blog post failed: you cannot post more than 2 blogs per day'
+    elif result == 'comments_per_day':
+        return 'Comment failed: you cannot post more than 3 comments per day'
+    elif result == 'comments_per_blog':
+        return 'Comment failed: you cannot post more than 1 comments on the same blog'
+    elif result == 'self_comment':
+        return 'Comment failed: you cannot comment on your own blog'
     else:
         raise Exception('unknown result: ' + str(result))
 
@@ -123,7 +131,19 @@ def action_logout():
 
 @app.route('/action/postblog', methods=['POST'])
 def action_postblog():
-    return redirect('/')
+    author      = get_username()
+    subject     = request.form['subject']
+    description = request.form['description']
+    tagsStr     = request.form['tags']
+    tags = tagsStr.split(",")
+    for tag in tags:
+        tag = tag.strip()
+    error = backend.create_blog(author, subject, description, tags)
+
+    if error is None:
+        return redirect('/')
+    elif isinstance(error, backend.ErrorBlogsPerDay):
+        return redirect('/post?result=blogs_per_day')
 
 @app.route('/action/comment', methods=['POST'])
 def action_comment():

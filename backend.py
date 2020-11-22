@@ -1,5 +1,17 @@
 import mysql.connector
 
+class ErrorBlogsPerDay:
+    pass
+
+class ErrorCommentsPerDay:
+    pass
+
+class ErrorCommentsPerBlog:
+    pass
+
+class ErrorCommentOwnBlog:
+    pass
+
 def insert_user(username, password, email, firstname, lastname):
     db = _connect()
     cursor = db.cursor()
@@ -64,6 +76,54 @@ def get_bloglist():
                 'date': date
             })
         return result
+    finally:
+        cursor.close()
+        db.close()
+
+def create_blog(author, subject, description, tags):
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        # Insert blog
+        query = "INSERT INTO Blogs (author, subject, description, blogdate) VALUES (%s, %s, %s, NOW())"
+        data = (author, subject, description)
+        cursor.execute(query, data)
+        # Insert tags
+        blogid = cursor.lastrowid
+        for tag in tags:
+            query = "INSERT INTO Tags (blogid, tag) VALUES (%s, %s)"
+            data = (blogid, tag)
+            cursor.execute(query, data)
+        # Commit
+        db.commit()
+        return None # No error
+    except mysql.connector.Error as err:
+        if err.sqlstate == '99001':
+            return ErrorBlogsPerDay()
+        else:
+            raise
+    finally:
+        cursor.close()
+        db.close()
+
+def create_comment(blogid, author, sentiment, description):
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        query = "INSERT INTO Comments (blogid, author, sentiment, description, commentdate) VALUES (%s, %s, %s, %s, NOW())"
+        data = (blogid, author, sentiment, description)
+        cursor.execute(query, data)
+        db.commit()
+        return None # No error
+    except mysql.connector.Error as err:
+        if err.sqlstate == '99002':
+            return ErrorCommentsPerDay
+        elif err.sqlstate == '99003':
+            return ErrorCommentsPerBlog
+        elif err.sqlstate == '99004':
+            return ErrorCommentOwnBlog
+        else:
+            raise
     finally:
         cursor.close()
         db.close()
