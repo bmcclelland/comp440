@@ -38,20 +38,7 @@ def show_home():
 
 @app.route('/')
 def show_bloglist():
-    blogs = [
-        {
-            'id' : 1,
-            'author' : 'alice',
-            'subject' : 'hi',
-            'date' : '2020-01-01'
-        },
-        {
-            'id' : 2,
-            'author' : 'bob',
-            'subject' : 'hi',
-            'date' : '2020-01-01'
-        }
-    ]
+    blogs = backend.get_bloglist()
     return std_template('bloglist.html', blogs=blogs)
 
 @app.route('/blog/<int:id>')

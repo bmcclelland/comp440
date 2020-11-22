@@ -28,25 +28,25 @@ INSERT INTO Hobbies (username, hobby) VALUES
     ('eve', 'swimming');
 
 INSERT INTO Blogs (author, blogdate, subject, description) VALUES
-    ('alice',   '2020-01-01', "New year",        'Happy new year'),
-    ('alice',   '2020-10-10', "Got a dog",       "This dog is cute"),
-    ('bob',     '2020-10-15', "SQL Tutorial",    'SELECT * FROM table;'),
-    ('david',   '2020-01-01', "2020",            'Happy new year'),
     ('eve',     '2019-09-10', "First post",      'Something'),
-    ('eve',     '2020-09-10', "One year later",  'Stuff');
+    ('david',   '2020-01-01', "2020",            'Happy new year'),
+    ('alice',   '2020-01-01', "New year",        'Happy new year'),
+    ('eve',     '2020-09-10', "One year later",  'Stuff'),
+    ('alice',   '2020-10-10', "Got a dog",       "This dog is cute"),
+    ('bob',     '2020-10-15', "SQL Tutorial",    'SELECT * FROM table;');
 
 INSERT INTO Tags (blogid,tag) VALUES
-    (1, "New Year"),
-    (1, "2020"),
-    (2, "dogs"),
-    (2, "pets"),
-    (3, "SQL"),
-    (3, "Databases"),
-    (4, "2020");
+    (3, "New Year"),
+    (3, "2020"),
+    (5, "dogs"),
+    (5, "pets"),
+    (6, "SQL"),
+    (6, "Databases"),
+    (2, "2020");
 
 INSERT INTO Comments (blogid, author, commentdate, sentiment, description) VALUES
-    (1, 'david',   '2020-01-01', 'positive', "You too"),
-    (1, 'eve',     '2020-01-01', 'positive', "Happy new year"),
-    (2, 'charlie', '2020-11-07', 'negative', "I don't like dogs"),
-    (3, 'charlie', '2020-11-15', 'negative', "Not helpful"),
-    (3, 'alice',   '2020-11-20', 'positive', "Very helpful");
+    (3, 'david',   '2020-01-01', 'positive', "You too"),
+    (3, 'eve',     '2020-01-01', 'positive', "Happy new year"),
+    (5, 'charlie', '2020-11-07', 'negative', "I don't like dogs"),
+    (6, 'charlie', '2020-11-15', 'negative', "Not helpful"),
+    (6, 'alice',   '2020-11-20', 'positive', "Very helpful");

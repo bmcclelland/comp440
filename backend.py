@@ -23,6 +23,25 @@ def retrieve_user(usernameStr):
     db.close()
     return result
 
+def get_bloglist():
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        query = "SELECT blogid,author,subject,blogdate FROM Blogs ORDER BY blogdate DESC,blogid DESC"
+        cursor.execute(query)
+        result = []
+        for (blogid,author,subject,date) in cursor.fetchall():
+            result.append({
+                'id': blogid,
+                'author': author,
+                'subject': subject,
+                'date': date
+            })
+        return result
+    finally:
+        cursor.close()
+        db.close()
+
 def _load_sql(file):
     db = _connect()
     with open(file, 'r') as f:
@@ -47,14 +66,14 @@ def _connect():
 
 def _create_user_table(db):
     cursor = db.cursor()
-    query = "CREATE TABLE IF NOT EXISTS users (username VARCHAR(32) PRIMARY KEY, password VARCHAR(32))"
+    query = "CREATE TABLE IF NOT EXISTS Users (username VARCHAR(32) PRIMARY KEY, password VARCHAR(32))"
     cursor.execute(query)
     cursor.close()
 
 def _insert_user(db, usernameStr, passwordStr):
     cursor = db.cursor()
     try:
-        query = "INSERT INTO users (username, password) VALUES (%s, %s)"
+        query = "INSERT INTO Users (username, password) VALUES (%s, %s)"
         data = (usernameStr, passwordStr)
         cursor.execute(query, data)
         db.commit()
@@ -69,7 +88,7 @@ def _insert_user(db, usernameStr, passwordStr):
 def _verify_user(db, usernameStr, passwordStr):
     cursor = db.cursor()
     try:
-        query = "SELECT username FROM users WHERE username = %s and password = %s"
+        query = "SELECT username FROM Users WHERE username = %s and password = %s"
         data = (usernameStr, passwordStr)
         cursor.execute(query, data)
         result = cursor.fetchone()
@@ -87,7 +106,7 @@ def _verify_user(db, usernameStr, passwordStr):
 def _retrieve_user(db, usernameStr):
     cursor = db.cursor()
     try:
-        query = "SELECT username FROM users WHERE username = %s"
+        query = "SELECT username FROM Users WHERE username = %s"
         data = (usernameStr,)
         cursor.execute(query, data)
         return cursor.fetchone()
@@ -95,3 +114,4 @@ def _retrieve_user(db, usernameStr):
         print(str(err))
     finally:
         cursor.close()
+
