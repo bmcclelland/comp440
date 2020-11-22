@@ -135,7 +135,7 @@ def get_blog(blogid):
     cursor = db.cursor(dictionary=True)
     try:
         # Get blog
-        query = "SELECT blogid as id, author, description, blogdate as date FROM Blogs WHERE blogid = %s"
+        query = "SELECT blogid as id, author, subject, description, blogdate as date FROM Blogs WHERE blogid = %s"
         data = (blogid,)
         cursor.execute(query, data)
         blog = cursor.fetchone()

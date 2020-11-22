@@ -3,6 +3,9 @@
 {% block title %}Blogs{% endblock %}
 
 {% block content %}
+<form action="{{ url_for('action_initialize') }}" method="post">
+    <input type="Submit" value="Initialize database">
+</form>
 <h2>Blogs</h2>
 <table>
 {% for blog in blogs %}
