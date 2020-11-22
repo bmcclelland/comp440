@@ -117,11 +117,11 @@ def create_comment(blogid, author, sentiment, description):
         return None # No error
     except mysql.connector.Error as err:
         if err.sqlstate == '99002':
-            return ErrorCommentsPerDay
+            return ErrorCommentsPerDay()
         elif err.sqlstate == '99003':
-            return ErrorCommentsPerBlog
+            return ErrorCommentsPerBlog()
         elif err.sqlstate == '99004':
-            return ErrorCommentOwnBlog
+            return ErrorCommentOwnBlog()
         else:
             raise
     finally:
@@ -151,7 +151,7 @@ def get_blog(blogid):
         blog['tags'] = tags
 
         # Get comments
-        query = "SELECT commentid as id, author, sentiment, description, commentdate as date FROM Comments WHERE blogid=%s"
+        query = "SELECT commentid as id, author, sentiment, description, commentdate as date FROM Comments WHERE blogid = %s ORDER BY commentdate DESC, commentid DESC"
         data = (blogid,)
         cursor.execute(query, data)
         blog['comments'] = cursor.fetchall()

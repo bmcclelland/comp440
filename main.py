@@ -22,9 +22,11 @@ def get_result_msg():
     elif result == 'comments_per_day':
         return 'Comment failed: you cannot post more than 3 comments per day'
     elif result == 'comments_per_blog':
-        return 'Comment failed: you cannot post more than 1 comments on the same blog'
-    elif result == 'self_comment':
+        return 'Comment failed: you cannot comment more than once per blog'
+    elif result == 'comment_own_blog':
         return 'Comment failed: you cannot comment on your own blog'
+    elif result == 'not_logged_in':
+        return 'Error: you must be logged in to do that'
     else:
         raise Exception('unknown result: ' + str(result))
 
@@ -111,7 +113,11 @@ def action_logout():
 
 @app.route('/action/postblog', methods=['POST'])
 def action_postblog():
-    author      = get_username()
+    author = get_username()
+
+    if author is None:
+        return redirect('/post?result=not_logged_in')
+
     subject     = request.form['subject']
     description = request.form['description']
     tagsStr     = request.form['tags']
@@ -127,7 +133,25 @@ def action_postblog():
 
 @app.route('/action/comment', methods=['POST'])
 def action_comment():
-    return redirect('/blog/' + str(request.form['blogid']))
+    author = get_username()
+    blogid = request.form['blogid']
+    url = '/blog/' + str(blogid)
+
+    if author is None:
+        return redirect(url + '?result=not_logged_in')
+
+    sentiment = request.form['sentiment']
+    description = request.form['description']
+    error = backend.create_comment(blogid, author, sentiment, description)
+
+    if error is None:
+        return redirect(url)
+    elif isinstance(error, backend.ErrorCommentsPerDay):
+        return redirect(url + '?result=comments_per_day')
+    elif isinstance(error, backend.ErrorCommentsPerBlog):
+        return redirect(url + '?result=comments_per_blog')
+    elif isinstance(error, backend.ErrorCommentOwnBlog):
+        return redirect(url + '?result=comment_own_blog')
 
 if __name__ == '__main__':
     app.run()
