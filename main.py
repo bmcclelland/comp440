@@ -13,6 +13,8 @@ def get_result_msg():
         return 'Login failed: invalid username/password'
     elif result == 'name_in_use':
         return 'Registration failed: username already in use'
+    elif result == 'email_in_use':
+        return 'Registration failed: email already in use'
     elif result == 'initialized':
         return 'Database reinitialized'
     else:
@@ -94,9 +96,18 @@ def action_login():
 
 @app.route('/action/register', methods=['POST'])
 def action_register():
-    if backend.retrieve_user(request.form['username']) is None:
-        backend.insert_user(request.form['username'], request.form['password'])
-        return redirect('/')
+    username  = request.form['username']
+    password  = request.form['password']
+    email     = request.form['email']
+    firstname = request.form['firstname']
+    lastname  = request.form['lastname']
+
+    if backend.verify_free_username(username):
+        if backend.verify_free_email(email):
+            backend.insert_user(username, password, email, firstname, lastname)
+            return redirect('/')
+        else:
+            return redirect('/register?result=email_in_use')
     else:
         return redirect('/register?result=name_in_use')
 

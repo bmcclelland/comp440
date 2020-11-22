@@ -1,22 +1,53 @@
 import mysql.connector
 
-def insert_user(usernameStr, passwordStr):
+def insert_user(username, password, email, firstname, lastname):
     db = _connect()
-    result = _insert_user(db, usernameStr, passwordStr)
-    db.close()
-    return result
+    cursor = db.cursor()
+    try:
+        query = "INSERT INTO Users (username, password, email, firstname, lastname) VALUES (%s, %s, %s, %s, %s)"
+        data = (username, password, email, firstname, lastname)
+        cursor.execute(query, data)
+        db.commit()
+    finally:
+        cursor.close()
+        db.close()
 
 def verify_user(usernameStr, passwordStr):
     db = _connect()
-    result = _verify_user(db, usernameStr, passwordStr)
-    db.close()
-    return result
+    cursor = db.cursor()
+    try:
+        query = "SELECT username FROM Users WHERE username = %s and password = %s"
+        data = (usernameStr, passwordStr)
+        cursor.execute(query, data)
+        result = cursor.fetchone()
+        return result is not None
+    finally:
+        cursor.close()
+        db.close()
 
-def retrieve_user(usernameStr):
+def verify_free_username(username):
     db = _connect()
-    result = _retrieve_user(db, usernameStr)
-    db.close()
-    return result
+    cursor = db.cursor()
+    try:
+        query = "SELECT username FROM Users WHERE username = %s"
+        data = (username,)
+        cursor.execute(query, data)
+        return cursor.fetchone() is None
+    finally:
+        cursor.close()
+        db.close()
+
+def verify_free_email(email):
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        query = "SELECT email FROM Users WHERE email = %s"
+        data = (email,)
+        cursor.execute(query, data)
+        return cursor.fetchone() is None
+    finally:
+        cursor.close()
+        db.close()
 
 def get_bloglist():
     db = _connect()
@@ -58,49 +89,3 @@ def _connect():
         host='127.0.0.1',
         database='440project'
     )
-
-def _insert_user(db, usernameStr, passwordStr):
-    cursor = db.cursor()
-    try:
-        query = "INSERT INTO Users (username, password) VALUES (%s, %s)"
-        data = (usernameStr, passwordStr)
-        cursor.execute(query, data)
-        db.commit()
-    except mysql.connector.Error as err:
-        print(str(err))
-        return False
-    finally:
-        cursor.close()
-                
-        print('User is created')
-
-def _verify_user(db, usernameStr, passwordStr):
-    cursor = db.cursor()
-    try:
-        query = "SELECT username FROM Users WHERE username = %s and password = %s"
-        data = (usernameStr, passwordStr)
-        cursor.execute(query, data)
-        result = cursor.fetchone()
-        
-        if result is None:
-            return False
-        else:
-            return True
-    except mysql.connector.Error as err:
-        print(str(err))
-        return False
-    finally:
-        cursor.close()
-                
-def _retrieve_user(db, usernameStr):
-    cursor = db.cursor()
-    try:
-        query = "SELECT username FROM Users WHERE username = %s"
-        data = (usernameStr,)
-        cursor.execute(query, data)
-        return cursor.fetchone()
-    except mysql.connector.Error as err:
-        print(str(err))
-    finally:
-        cursor.close()
-
