@@ -27,18 +27,72 @@ def set_username(username):
     else:
         session['username'] = username
 
-@app.route('/')
-def show_home():
+def std_template(t, **params):
     msg = get_result_msg()
     username = get_username()
-    if username is None:
-        return render_template('index.html', msg=msg)
-    else:
-        return render_template('home.html', username=username)
+    return render_template(t, msg=msg, username=username, **params)
 
 @app.route('/')
+def show_home():
+    return show_bloglist()
+
+@app.route('/')
+def show_bloglist():
+    blogs = [
+        {
+            'id' : 1,
+            'author' : 'alice',
+            'subject' : 'hi',
+            'date' : '2020-01-01'
+        },
+        {
+            'id' : 2,
+            'author' : 'bob',
+            'subject' : 'hi',
+            'date' : '2020-01-01'
+        }
+    ]
+    return std_template('bloglist.html', blogs=blogs)
+
+@app.route('/blog/<int:id>')
+def show_blog(id):
+    blog = {
+        'id':1,
+        'author':'alice',
+        'subject':'Helllo',
+        'description':'post',
+        'date':'2020-01-01',
+        'tags':['one','t w o'],
+        'comments':[
+            {
+                'id':1,
+                'sentiment':'positive',
+                'description':'Nice',
+                'author':'bob',
+                'date':'2020-01-02'
+            },
+            {
+                'id':2,
+                'sentiment':'positive',
+                'description':'Nice',
+                'author':'eve',
+                'date':'2020-01-03'
+            }
+        ]
+    }
+    return std_template('blog.html',blog=blog)
+
+@app.route('/post')
+def show_postblog():
+    return std_template('postblog.html')
+
+@app.route('/login')
 def show_login():
-    return show_home()
+    return std_template('login.html')
+
+@app.route('/register')
+def show_register():
+    return std_template('register.html')
 
 @app.route('/action/login', methods=['POST'])
 def action_login():
@@ -49,12 +103,7 @@ def action_login():
         return redirect('/')
     else:
         set_username(None)
-        return redirect('/?result=bad_login')
-
-@app.route('/register')
-def show_register():
-    msg = get_result_msg()
-    return render_template('register.html', msg=msg)
+        return redirect('/login?result=bad_login')
 
 @app.route('/action/register', methods=['POST'])
 def action_register():
@@ -73,6 +122,14 @@ def action_initialize():
 def action_logout():
     set_username(None)
     return redirect('/')
+
+@app.route('/action/postblog', methods=['POST'])
+def action_postblog():
+    return redirect('/')
+
+@app.route('/action/comment', methods=['POST'])
+def action_comment():
+    return redirect('/blog/' + str(request.form['blogid']))
 
 if __name__ == '__main__':
     backend.create_user_table()

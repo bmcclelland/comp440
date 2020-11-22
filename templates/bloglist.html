@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block title %}Blogs{% endblock %}
+
+{% block content %}
+<h2>Blogs</h2>
+<table>
+{% for blog in blogs %}
+<tr>
+    <td>{{ blog['date'] }}</td>
+    <td>{{ blog['author'] }}</td>
+    <td><a href="{{ url_for('show_blog', id=blog['id']) }}">{{ blog['subject'] }}</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ blog['subject'] }}{% endblock %}
+
+{% block content %}
+<h2>{{ blog['subject'] }}</h2>
+<h4>Posted by {{ blog['author'] }} on {{ blog['date'] }}</h4>
+<p>{{ blog['description'] }}</p>
+
+<h3>Comments</h3>
+<div class="comment">
+    <form method="POST" action="{{ url_for('action_comment') }}">
+        <input type="hidden" name="blogid" value="{{ blog['id'] }}">
+        <div><textarea name="description" placeholder="New comment" required></textarea></div>
+        <div>
+            <select name="sentiment">
+                <option value="positive">Positive</option>
+                <option value="negative">Negative</option>
+            </select>
+            <input type="submit" value="Post">
+        </div>
+    </form>
+    {% for comment in blog['comments'] %}
+        <div>
+            <h4>{{ comment['author'] }} on {{ comment['date'] }} ({{ comment['sentiment'] }})</h4>
+            <p>{{ comment['description'] }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
