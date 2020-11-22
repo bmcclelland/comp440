@@ -24,6 +24,9 @@
         {% if msg %}
             <div class="msg">{{ msg }}</div>
         {% endif %}
+        <form action="{{ url_for('action_initialize') }}" method="post">
+            <input type="Submit" value="Initialize database">
+        </form>
 		<div class="content">
 			{% block content %}{% endblock %}
 		</div>
