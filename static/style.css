@@ -106,6 +106,9 @@ body {
 	background-color: #fff;
 }
 .msg {
+    background-color: #754400;
+    color: #edecea;
+    font-weight: bold;
     height: 30px;
     width: 100%;
     border: 0;
