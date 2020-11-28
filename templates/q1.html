@@ -1,0 +1,7 @@
+<h2>Question 1</h2>
+<form method='POST' action="{{ url_for('show_q1') }}">
+    <input type="text" name="user" placeholder="username" autocomplete="off">
+    <input type="submit" value="Submit">
+</form>
+<p>{{ user }}</p>
+<p>{{ results }}</p>

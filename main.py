@@ -154,5 +154,51 @@ def action_comment():
     elif isinstance(error, backend.ErrorCommentOwnBlog):
         return redirect(url + '?result=comment_own_blog')
 
+@app.route('/phase3', methods=['GET'])
+def show_phase3():
+    s = ""
+    for i in range(1, 7):
+        s += '<a href="phase3/' + str(i) + '">Question ' + str(i) + '</a><br />\n'
+    return s
+
+@app.route('/phase3/1', methods=['GET', 'POST'])
+def show_q1():
+    user = request.form.get('user')
+    if user:
+        results = backend.q1(user)
+        return std_template('q1.html', user=user, results=results)
+    else:
+        return std_template('q1.html', user=None, results=None)
+
+@app.route('/phase3/2', methods=['GET'])
+def show_q2():
+    results = backend.q2()
+    return std_template('q2.html', results=results)
+
+@app.route('/phase3/3', methods=['GET', 'POST'])
+def show_q3():
+    user1 = request.form.get('user1')
+    user2 = request.form.get('user2')
+    if user1 and user2:
+        results = backend.q3(user1, user2)
+        return std_template('q3.html', user1=user1, user2=user2, results=results)
+    else:
+        return std_template('q3.html', user1=None, user2=None, results=None)
+
+@app.route('/phase3/4', methods=['GET'])
+def show_q4():
+    results = backend.q4()
+    return std_template('q4.html', results=results)
+
+@app.route('/phase3/5', methods=['GET'])
+def show_q5():
+    results = backend.q5()
+    return std_template('q5.html', results=results)
+
+@app.route('/phase3/6', methods=['GET'])
+def show_q6():
+    results = backend.q6()
+    return std_template('q6.html', results=results)
+
 if __name__ == '__main__':
     app.run()

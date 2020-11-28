@@ -194,6 +194,36 @@ def get_blog(blogid):
         cursor.close()
         db.close()
 
+def q1(username):
+    # Get blogs of username where all comments are positive
+    # TODO
+    return None
+
+def q2():
+    # Get user(s) who posted the most blogs on 10/10/2020
+    # TODO
+    return None
+
+def q3(username1, username2):
+    # Get users who are followed by both username1 and username2
+    # TODO
+    return None
+
+def q4():
+    # Get users who have never posted a blog
+    # TODO
+    return None
+
+def q5():
+    # Get users who have posted comments and all of them are negative
+    # TODO
+    return None
+
+def q6():
+    # Get users who have never received negative comments on their blogs
+    # TODO
+    return None
+
 def _load_sql(file):
     db = _connect()
     with open(file, 'r') as f:
