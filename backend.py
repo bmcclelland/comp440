@@ -151,6 +151,12 @@ def _join_names(item):
     item['fullname'] = fullname
     return item
 
+def _unwrap_singles(xs):
+    result = []
+    for (x,) in xs:
+        result.append(x)
+    return result
+
 def get_blog(blogid):
     # Returns the given blog along with its tags and comments.
     # If no such blog, return None.
@@ -212,10 +218,9 @@ def q2():
     db = _connect()
     cursor = db.cursor()
     try:
-        #Remove count(*) if count is not required..
-        query = "SELECT author, COUNT(*) FROM Blogs GROUP BY author HAVING COUNT(*) = (SELECT MAX(mostcount) FROM (SELECT COUNT(blogid) AS mostcount FROM Blogs GROUP BY author) x)"
+        query = "SELECT author FROM Blogs GROUP BY author HAVING COUNT(*) = (SELECT MAX(mostcount) FROM (SELECT COUNT(blogid) AS mostcount FROM Blogs GROUP BY author) x)"
         cursor.execute(query)
-        return list(cursor.fetchall())
+        return _unwrap_singles(cursor.fetchall())
     finally:
         cursor.close()
         db.close()
@@ -228,7 +233,7 @@ def q3(username1, username2):
         query = "SELECT C.leader FROM Follows C, Follows B  WHERE B.leader = C.leader AND C.follower = %s AND B.follower = %s"
         data = (username1,username2,)
         cursor.execute(query, data)
-        return list(cursor.fetchall())
+        return _unwrap_singles(cursor.fetchall())
     finally:
         cursor.close()
         db.close()
@@ -240,7 +245,7 @@ def q4():
     try:
         query = "SELECT distinct username FROM Users WHERE username not in (SELECT distinct author from Blogs)"
         cursor.execute(query)
-        return list(cursor.fetchall())
+        return _unwrap_singles(cursor.fetchall())
     finally:
         cursor.close()
         db.close()
@@ -252,7 +257,7 @@ def q5():
     try:
         query = "SELECT distinct author FROM Comments WHERE sentiment='negative' and author not in (SELECT author from Comments WHERE sentiment='positive')"
         cursor.execute(query)
-        return list(cursor.fetchall())
+        return _unwrap_singles(cursor.fetchall())
     finally:
         cursor.close()
         db.close()
@@ -264,7 +269,7 @@ def q6():
     try:
         query = "select distinct author from Blogs where author not in (SELECT author FROM Comments WHERE sentiment='negative')"
         cursor.execute(query)
-        return list(cursor.fetchall())
+        return _unwrap_singles(cursor.fetchall())
     finally:
         cursor.close()
         db.close()
