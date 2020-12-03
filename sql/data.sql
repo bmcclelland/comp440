@@ -33,7 +33,7 @@ INSERT INTO Blogs (author, blogdate, subject, description) VALUES
     ('alice',   '2020-01-01', "New year",        'Happy new year'),
     ('eve',     '2020-09-10', "One year later",  'Stuff'),
     ('alice',   '2020-10-10', "Got a dog",       "This dog is cute"),
-    ('bob',     '2020-10-15', "SQL Tutorial",    'SELECT * FROM table;');
+    ('bob',     '2020-10-10', "SQL Tutorial",    'SELECT * FROM table;');
 
 INSERT INTO Tags (blogid,tag) VALUES
     (3, "New Year"),

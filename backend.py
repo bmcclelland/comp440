@@ -205,7 +205,15 @@ def q1(username):
     db = _connect()
     cursor = db.cursor(dictionary=True)
     try:
-        query = "SELECT blogid as id, author, subject, blogdate as date from Blogs WHERE author = %s and blogid not in (SELECT distinct blogid from Comments WHERE sentiment='negative')"
+        query = """
+            SELECT blogid AS id, author, subject, blogdate AS date
+            FROM Blogs
+            WHERE author = %s AND blogid NOT IN (
+                SELECT DISTINCT blogid
+                FROM Comments
+                WHERE sentiment='negative'
+            )
+        """
         data = (username,)
         cursor.execute(query, data)
         return list(cursor.fetchall())
@@ -218,7 +226,21 @@ def q2():
     db = _connect()
     cursor = db.cursor()
     try:
-        query = "SELECT author FROM Blogs GROUP BY author HAVING COUNT(*) = (SELECT MAX(mostcount) FROM (SELECT COUNT(blogid) AS mostcount FROM Blogs GROUP BY author) x)"
+        query = """
+            SELECT author
+            FROM Blogs
+            WHERE blogdate='2020-10-10'
+            GROUP BY author
+            HAVING COUNT(*) = (
+                SELECT MAX(mostcount)
+                FROM (
+                    SELECT COUNT(blogid) AS mostcount
+                    FROM Blogs
+                    WHERE blogdate='2020-10-10'
+                    GROUP BY author
+                ) x
+            )
+        """
         cursor.execute(query)
         return _unwrap_singles(cursor.fetchall())
     finally:
@@ -230,7 +252,11 @@ def q3(username1, username2):
     db = _connect()
     cursor = db.cursor()
     try:
-        query = "SELECT C.leader FROM Follows C, Follows B  WHERE B.leader = C.leader AND C.follower = %s AND B.follower = %s"
+        query = """
+            SELECT C.leader
+            FROM Follows C, Follows B
+            WHERE B.leader = C.leader AND C.follower = %s AND B.follower = %s
+        """
         data = (username1,username2,)
         cursor.execute(query, data)
         return _unwrap_singles(cursor.fetchall())
@@ -243,7 +269,14 @@ def q4():
     db = _connect()
     cursor = db.cursor()
     try:
-        query = "SELECT distinct username FROM Users WHERE username not in (SELECT distinct author from Blogs)"
+        query = """
+            SELECT DISTINCT username
+            FROM Users
+            WHERE username NOT IN (
+                SELECT DISTINCT author
+                FROM Blogs
+            )
+        """
         cursor.execute(query)
         return _unwrap_singles(cursor.fetchall())
     finally:
@@ -255,7 +288,15 @@ def q5():
     db = _connect()
     cursor = db.cursor()
     try:
-        query = "SELECT distinct author FROM Comments WHERE sentiment='negative' and author not in (SELECT author from Comments WHERE sentiment='positive')"
+        query = """
+            SELECT DISTINCT author
+            FROM Comments
+            WHERE sentiment='negative' AND author NOT IN (
+                SELECT DISTINCT author
+                FROM Comments
+                WHERE sentiment='positive'
+            )
+            """
         cursor.execute(query)
         return _unwrap_singles(cursor.fetchall())
     finally:
@@ -267,7 +308,15 @@ def q6():
     db = _connect()
     cursor = db.cursor()
     try:
-        query = "select distinct author from Blogs where author not in (SELECT author FROM Comments WHERE sentiment='negative')"
+        query = """
+            SELECT DISTINCT username
+            FROM Users
+            WHERE username NOT IN (
+                SELECT B.author
+                FROM Comments as C, Blogs as B
+                WHERE C.blogid=B.blogid AND sentiment='negative'
+            )
+        """
         cursor.execute(query)
         return _unwrap_singles(cursor.fetchall())
     finally:
