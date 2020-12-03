@@ -3,10 +3,7 @@
     <input type="text" name="user" placeholder="username" autocomplete="off">
     <input type="submit" value="Submit">
 </form>
-<p>{{user_1}}</p>
-<p>{{user_2}}</p>
-<p>{{user_3}}</p>
-<p>{{user_4}}</p>
-<p>{{user_5}}</p>
-<p>{{user_6}}</p>
+{% for i in results %}
+<p>{{ i }}</p>
+{% endfor %}
 <p>{{ results }}</p>
