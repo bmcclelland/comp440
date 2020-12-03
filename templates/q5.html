@@ -1,9 +1,4 @@
 <h2>Question 5</h2>
-<form method='POST' action="{{ url_for('show_q5') }}">
-    <input type="text" name="user" placeholder="username" autocomplete="off">
-    <input type="submit" value="Submit">
-</form>
 {% for i in results %}
-<p>{{ \n i }}</p>
+    <p>{{ i }}</p>
 {% endfor %}
-<p>{{ results }}</p>

@@ -3,8 +3,15 @@
     <input type="text" name="user" placeholder="username" autocomplete="off">
     <input type="submit" value="Submit">
 </form>
-<p>{{ user }}</p>
-{% for i in results %}
-<p>{{ \n i }}</p>
-{% endfor %}
-<p>{{ results }}</p>
+{% if user %}
+    <p>Blogs for {{ user }}:</p>
+    <table>
+    {% for blog in results %}
+        <tr>
+            <td>{{ blog['date'] }}</td>
+            <td>{{ blog['author'] }}</td>
+            <td><a href="{{ url_for('show_blog', id=blog['id']) }}">{{ blog['subject'] }}</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endif %}

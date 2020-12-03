@@ -4,6 +4,9 @@
     <input type="text" name="user2" placeholder="username 2" autocomplete="off">
     <input type="submit" value="Submit">
 </form>
-<p>{{ user1 }}</p>
-<p>{{ user2 }}</p>
-<p>{{ results }}</p>
+{% if user1 and user2 %}
+    <p>Followed by {{ user1 }} and {{ user2 }}:</p>
+    {% for i in results %}
+        <p>{{ i }}</p>
+    {% endfor %}
+{% endif %}
