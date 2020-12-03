@@ -196,33 +196,78 @@ def get_blog(blogid):
 
 def q1(username):
     # Get blogs of username where all comments are positive
-    # TODO
-    return None
+    db = _connect()
+    cursor = db.cursor(dictionary=True)
+    try:
+        query = "SELECT blogid as id, author, subject, blogdate as date from Blogs WHERE author = %s and blogid not in (SELECT distinct blogid from Comments WHERE sentiment='negative')"
+        data = (username,)
+        cursor.execute(query, data)
+        return list(cursor.fetchall())
+    finally:
+        cursor.close()
+        db.close()
 
 def q2():
     # Get user(s) who posted the most blogs on 10/10/2020
-    # TODO
-    return None
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        #Remove count(*) if count is not required..
+        query = "SELECT author, COUNT(*) FROM Blogs GROUP BY author HAVING COUNT(*) = (SELECT MAX(mostcount) FROM (SELECT COUNT(blogid) AS mostcount FROM Blogs GROUP BY author) x)"
+        cursor.execute(query)
+        return list(cursor.fetchall())
+    finally:
+        cursor.close()
+        db.close()
 
 def q3(username1, username2):
     # Get users who are followed by both username1 and username2
-    # TODO
-    return None
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        query = "SELECT C.leader FROM Follows C, Follows B  WHERE B.leader = C.leader AND C.follower = %s AND B.follower = %s"
+        data = (username1,username2,)
+        cursor.execute(query, data)
+        return list(cursor.fetchall())
+    finally:
+        cursor.close()
+        db.close()
 
 def q4():
     # Get users who have never posted a blog
-    # TODO
-    return None
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        query = "SELECT distinct username FROM Users WHERE username not in (SELECT distinct author from Blogs)"
+        cursor.execute(query)
+        return list(cursor.fetchall())
+    finally:
+        cursor.close()
+        db.close()
 
 def q5():
     # Get users who have posted comments and all of them are negative
-    # TODO
-    return None
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        query = "SELECT distinct author FROM Comments WHERE sentiment='negative' and author not in (SELECT author from Comments WHERE sentiment='positive')"
+        cursor.execute(query)
+        return list(cursor.fetchall())
+    finally:
+        cursor.close()
+        db.close()
 
 def q6():
     # Get users who have never received negative comments on their blogs
-    # TODO
-    return None
+    db = _connect()
+    cursor = db.cursor()
+    try:
+        query = "select distinct author from Blogs where author not in (SELECT author FROM Comments WHERE sentiment='negative')"
+        cursor.execute(query)
+        return list(cursor.fetchall())
+    finally:
+        cursor.close()
+        db.close()
 
 def _load_sql(file):
     db = _connect()

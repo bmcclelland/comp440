@@ -45,6 +45,7 @@ INSERT INTO Tags (blogid,tag) VALUES
     (2, "2020");
 
 INSERT INTO Comments (blogid, author, commentdate, sentiment, description) VALUES
+    (1, 'alice',   '2019-09-09', 'negative', "Nope"),
     (3, 'david',   '2020-01-01', 'positive', "You too"),
     (3, 'eve',     '2020-01-01', 'positive', "Happy new year"),
     (5, 'charlie', '2020-11-07', 'negative', "I don't like dogs"),
